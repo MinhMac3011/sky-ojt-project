@@ -1,0 +1,35 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: quarkus-app
+  labels:
+    name: quarkus-app
+spec:
+  ports:
+  - port: 8080
+    targetPort: 8080
+  clusterIP: None
+  selector:
+    name: quarkus-app
+  type: ClusterIP
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: quarkus-app
+spec:
+  selector:
+    matchLabels:
+      name: quarkus-app
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        name: quarkus-app
+    spec:
+      containers:
+        - image: gcr.io/gke-hello-world-350007/minhmd-quarkus-app:v6
+          name: quarkus-app
+          ports:
+            - containerPort: 8080  
